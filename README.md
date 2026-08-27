@@ -225,7 +225,11 @@ Full evidence: [docs/VERIFIED_REPLACEMENT.md](docs/VERIFIED_REPLACEMENT.md).
 Install: both CLIs ship with the Hermes Agent setup (`hermes setup tools`); the
 `browser-use` and `computer_use` toolsets are enabled by default in config.
 
-See [TESTS.md](TESTS.md) for the full hard-probe catalog and measured limits.
+See [TESTS.md](TESTS.md) for the full hard-probe catalog and measured limits,
+and [docs/INTEGRATION.md](docs/INTEGRATION.md) for wiring this into **any**
+agent harness (Claude Code, OpenAI Assistants, LangChain, custom loops) —
+including the three enforcement strategies for resource hygiene and why a
+cron is optional, not required.
 
 ## Credits
 
