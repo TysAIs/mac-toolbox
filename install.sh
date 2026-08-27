@@ -23,7 +23,15 @@ for skill_src in "$SRC"/skills/*/*; do
   echo "    installed $category/$skill"
 done
 
-echo "==> 3/4 Generating policy file with detected hardware"
+echo "==> 3/5 Installing helper scripts into $DEST/scripts/"
+mkdir -p "$DEST/scripts"
+for s in "$SRC"/scripts/*.sh; do
+  [ -f "$s" ] || continue
+  cp "$s" "$DEST/scripts/"
+  chmod +x "$DEST/scripts/$(basename "$s")"
+done
+
+echo "==> 4/5 Generating policy file with detected hardware"
 if [ ! -s "$DEST/computer-control-policy.md" ]; then
   "$SRC/scripts/detect-hardware.sh" > "$TMP/hardware.md"
   # Splice hardware block over the {{HARDWARE_BASELINE}} marker line.
@@ -40,7 +48,7 @@ else
   echo "    policy exists and is non-empty — leaving untouched"
 fi
 
-echo "==> 4/4 Stamping ladder into all agent SOUL.md files"
+echo "==> 5/5 Stamping ladder + hygiene rules into all agent SOUL.md files"
 "$SRC/scripts/stamp-computer-control.sh" "$DEST"
 
 cat <<'EOF'
@@ -50,5 +58,7 @@ Done. Remaining manual steps:
      Screen & System Audio Recording to your terminal / agent host app.
   2. Verify:        macos-harness doctor          (expect all true)
   3. Live test:     echo 'print(mac.see("Finder"))' | macos-harness
-  4. Restart your Hermes gateway so agents reload souls + skills.
+  4. Optional: schedule resource hygiene checks (no LLM needed):
+     */30 * * * * $DEST/scripts/resource-watchdog.sh
+  5. Restart your Hermes gateway so agents reload souls + skills.
 EOF
