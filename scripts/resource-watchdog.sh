@@ -17,8 +17,9 @@ now=$(date +%s)
 # ── 1. zombie chat -q workers ──────────────────────────────────────────
 while read -r pid cpu etime; do
   [ -z "$pid" ] && continue
-  hours=${etime%%:*}
-  [ "$hours" -ge 1 ] && REPORT+="ZOMBIE: pid $pid hermes chat worker up ${etime}, cpu ${cpu}% — kill it"$'\n'
+  # etime may be [[dd-]hh:]mm:ss — normalize to seconds before comparing
+  secs=$(echo "$etime" | awk -F'[-:]' '{if(NF==4)s=$1*86400+$2*3600+$3*60+$4; else if(NF==3)s=$1*3600+$2*60+$3; else s=$1*60+$2; print s}')
+  [ "$secs" -ge 3600 ] && REPORT+="ZOMBIE: pid $pid hermes chat worker up ${etime}, cpu ${cpu}% — kill it"$'\n'
 done < <(ps -Ao pid,pcpu,etime,args | awk '/chat -q/ && !/awk/ {print $1, $2, $3}')
 
 # ── 2. CDP duplicate tabs ──────────────────────────────────────────────
