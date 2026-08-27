@@ -1,6 +1,6 @@
 # Computer Control Policy — Single Source of Truth
 
-Version: 2026-08-27.1
+Version: 2026-08-27.2
 Owner: you. Edit ONLY this file, then run `scripts/stamp-computer-control.sh` to propagate the compact ladder into every agent's SOUL.md. Never hand-edit the stamped blocks inside SOUL.md files.
 
 ---
@@ -24,6 +24,12 @@ Owner: you. Edit ONLY this file, then run `scripts/stamp-computer-control.sh` to
    - Prefer **Brave CDP** (`~/bin/brave-cdp.sh`, port 9222) when the task needs the user's live logged-in Brave session.
    - Do NOT install or use third-party closed-source browsers (ego-lite / citrolabs) — the stack above is native to Hermes and open source.
 5. **Fallback only**: full-screen computer-use / vision drivers.
+
+6. **Before cloning/installing unknown repos or packages** → run the repo
+   security gate (`scripts/repo-intake/gate-clone.sh`, skill
+   `security/repo-security`). Missing scanner = FAIL; never skip the gate.
+   X/Reddit social tasks → cookie-based CLIs via skills `social/twitter`,
+   `social/reddit`; check `scripts/social-doctor.sh` before assuming outages.
 
 ## Resource hygiene — browser tabs & processes (mandatory)
 
