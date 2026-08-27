@@ -57,3 +57,19 @@ jobs:
           test "$A" -eq 1 && test "$E" -eq 1
 
           echo "ALL REGRESSION CHECKS PASSED"
+
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Watchdog syntax + healthy-run smoke test
+        run: |
+          bash -n scripts/resource-watchdog.sh
+          # Healthy machine (no CDP, no zombies) must print the healthy line.
+          OUT=$(./scripts/resource-watchdog.sh)
+          echo "$OUT"
+          case "$OUT" in
+            healthy*) exit 0 ;;
+            *) echo "::error::watchdog flagged issues on a clean runner"; exit 1 ;;
+          esac

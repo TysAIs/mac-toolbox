@@ -1,6 +1,6 @@
 # Computer Control Policy — Single Source of Truth
 
-Version: 2026-08-22.1
+Version: 2026-08-27.1
 Owner: you. Edit ONLY this file, then run `scripts/stamp-computer-control.sh` to propagate the compact ladder into every agent's SOUL.md. Never hand-edit the stamped blocks inside SOUL.md files.
 
 ---
@@ -24,6 +24,23 @@ Owner: you. Edit ONLY this file, then run `scripts/stamp-computer-control.sh` to
    - Prefer **Brave CDP** (`~/bin/brave-cdp.sh`, port 9222) when the task needs the user's live logged-in Brave session.
    - Do NOT install or use third-party closed-source browsers (ego-lite / citrolabs) — the stack above is native to Hermes and open source.
 5. **Fallback only**: full-screen computer-use / vision drivers.
+
+## Resource hygiene — browser tabs & processes (mandatory)
+
+Bots that leave artifacts behind degrade the whole Mac for everyone. Rules:
+
+- **Close every CDP/browser tab you open, when the task ends.** Count what you
+  opened; close the same set (`GET http://localhost:9222/json/close/<tabId>`,
+  or `browser` helpers). Keep **≤ 2 tabs per host** alive across the session.
+- **Dedupe before opening**: check `GET /json/list` first — if a tab for that
+  URL/host already exists, reuse it instead of spawning another.
+- **Kill your own zombie workers**: a `hermes chat -q` / subprocess worker that
+  is still alive after its card completes (or shows 0% CPU for hours) gets
+  terminated by whoever notices it — do not "leave it running just in case".
+- **Verify before finishing a browser task**: `curl -s localhost:9222/json/list`
+  and confirm tab count is back near your starting baseline. A finished task
+  that leaves +10 tabs is an incomplete task.
+- The fleet watchdog surfaces violations as kanban cards to the owning bot.
 
 ## Web automation safety rules
 

@@ -12,7 +12,7 @@ auth-flow handling that matters most — with no closed-source dependency.
 1. Agent can drive a browser without touching the user's tabs (isolation).
 2. Agent reuses the user's logged-in session (no re-login for the user).
 3. Agent can **complete auth flows** (fill login forms, approve OAuth consent).
-4. Agent can extract cookies/tokens for external tools (e.g. xPST).
+4. Agent can extract cookies/tokens for external tools (e.g. cookie-backed CLIs).
 
 ## Live test results (2026-08-24, all on Brave CDP port 9222)
 
@@ -25,7 +25,7 @@ auth-flow handling that matters most — with no closed-source dependency.
 | 5 | **Click links** | `js(...click())` | ✅ example.com → iana.org |
 | 6 | JS execution | `js("document.title")` | ✅ |
 | 7 | **Tab isolation** (ego's "space") | `cdp("Target.createTarget")` | ✅ new tab created, agent tab undisturbed |
-| 8 | **Cookie extraction** (xPST path) | `cdp("Network.getAllCookies")` | ✅ 10 X cookies read via CDP |
+| 8 | **Cookie extraction** (verification path) | `cdp("Network.getAllCookies")` | ✅ session cookies read via CDP (count redacted) |
 | 9 | Desktop-level GUI control | `cua-driver` | ✅ Accessibility + Screen Recording granted |
 
 ## What this means for AUTH flows (the user's #1 concern)
@@ -39,7 +39,7 @@ own logged-in browser profile.
 credentials (which the agent should never silently extract — that's a security
 boundary) *or* the user's one-time manual login so the session exists to reuse.
 What the stack guarantees: the agent can *drive* the flow, *reuse* an existing
-session, and *extract* tokens for tools like xPST — all without a closed-source
+session, and *extract* tokens for tools like cookie-backed CLIs — all without a closed-source
 middleman and without the CPU bloat.
 
 ## Security posture (vs. closed-source ego)

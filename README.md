@@ -1,10 +1,10 @@
 <div align="center">
 
-# hermes-macos-full-control
+# mac-toolbox
 
-**Give every agent on your Mac the same safe, layered ability to see and operate real apps — without prompt bloat or tool confusion.**
+**Give every agent on your Mac the same safe, layered ability to see and operate real apps — plus keep the machine healthy while they work.**
 
-[![CI](https://github.com/TysAIs/hermes-macos-full-control/actions/workflows/ci.yml/badge.svg)](https://github.com/TysAIs/hermes-macos-full-control/actions/workflows/ci.yml)
+[![CI](https://github.com/TysAIs/mac-toolbox/actions/workflows/ci.yml/badge.svg)](https://github.com/TysAIs/mac-toolbox/actions/workflows/ci.yml)
 ![Platform](https://img.shields.io/badge/platform-macOS%2014%2B-black)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -20,6 +20,12 @@ AI agents fail at desktop work for two reasons:
 
 1. **No hands or eyes.** They can run terminal commands, but if a task lives inside a GUI — System Settings, an OAuth consent sheet, an upload dialog, any app without a CLI — they're stuck.
 2. **Too many overlapping tools.** Once you add GUI automation, agents waste turns picking the *wrong layer* (clicking through menus when one CLI command would do it).
+
+And once they *can* work, they create a third problem nobody plans for:
+
+3. **They leave messes behind.** Dozens of duplicate browser tabs from automation runs, zombie agent processes stuck at 0% CPU for hours, RAM quietly eaten until the whole Mac slows down.
+
+mac-toolbox solves all three: the routing ladder for control, plus hygiene rules and a watchdog that keeps agents from trashing your machine.
 
 ## The fix: a routing ladder, stamped into every agent
 
@@ -57,8 +63,8 @@ costing under 100 words of persistent context per agent.
 ## Quick start
 
 ```bash
-git clone https://github.com/TysAIs/hermes-macos-full-control.git
-cd hermes-macos-full-control
+git clone https://github.com/TysAIs/mac-toolbox.git
+cd mac-toolbox
 ./install.sh
 ```
 
@@ -96,6 +102,36 @@ launchctl kickstart -k gui/$(id -u)/ai.hermes.gateway
 
 Every agent updates atomically. New profile agents get picked up automatically —
 the stamper discovers all `profiles/*/SOUL.md` on its own.
+
+## Resource hygiene: agents that clean up after themselves
+
+The policy file includes mandatory **resource-hygiene rules** that get stamped
+into every agent alongside the routing ladder:
+
+- Close every browser tab you opened (≤ 2 per host), verified via CDP before a
+  task is "done"
+- Reuse existing tabs instead of spawning duplicates
+- Kill your own stuck/zombie worker processes — never leave them running
+- A finished task that leaves +10 tabs open counts as an incomplete task
+
+And `scripts/resource-watchdog.sh` enforces it mechanically. Run it from cron
+(no LLM needed):
+
+```bash
+*/30 * * * * ~/.hermes/scripts/resource-watchdog.sh   # empty output = healthy
+```
+
+It detects:
+
+| Check | What it catches |
+|---|---|
+| Zombie agent workers | `chat -q`-style subprocesses alive at 0% CPU for hours |
+| Duplicate CDP tabs | e.g. the same console URL opened 25× by repeated runs (measured: 4+ GB RSS) |
+| Browser memory bloat | Chromium-family RSS above threshold → audit tabs |
+| Stale board heartbeats | opt-in via `WATCHDOG_CARDS_CMD` for your agent-board cards |
+
+Everything is local-only output; point your scheduler at whatever notification
+channel you already use.
 
 ## Safety model
 
@@ -181,7 +217,7 @@ isolation, login-state reuse, **auth-flow completion**, and cookie extraction:
 | Attach to the user's real logged-in Brave session (CDP 9222) | ✅ |
 | Drive auth flows (fill login form, click, approve consent) | ✅ `fill_input` → readback verified on x.com/login |
 | Tab isolation (agent tabs don't disturb user) | ✅ `Target.createTarget` |
-| Extract cookies/tokens for external tools (xPST etc.) | ✅ `Network.getAllCookies` |
+| Extract cookies/tokens for external tools (cookie-backed CLI tools etc.) | ✅ `Network.getAllCookies` |
 | Desktop-level GUI (consent dialogs, native UI) | ✅ cua-driver, TCC-gated |
 
 Full evidence: [docs/VERIFIED_REPLACEMENT.md](docs/VERIFIED_REPLACEMENT.md).
