@@ -32,15 +32,15 @@ it for normal reads/posts and never double-install it from this repo.
 ## Read cheat-sheet
 
 ```bash
-twitter feed -t following --max 20        # home/following timeline
+twitter feed -t following -n/--max 20        # home/following timeline
 twitter search "QUERY" -n 20 --json       # also -t Top|Latest|Photos|Videos,
                                           # --from @user, --lang en, --since YYYY-MM-DD
 twitter tweet 1234567890                  # tweet + replies (URL ok)
 twitter thread <id>                       # full thread
 twitter user @handle                      # profile
-twitter user-posts @handle --max 20
-twitter likes @handle --max 30            # own likes only (X privacy, Jun 2024)
-twitter followers @handle --max 50
+twitter user-posts @handle -n/--max 20
+twitter likes @handle -n/--max 30            # own likes only (X privacy, Jun 2024)
+twitter followers @handle -n/--max 50
 twitter bookmarks                         # own bookmarks
 twitter article <id> --markdown           # X Article -> markdown (unique here)
 twitter list <list-id>
@@ -62,7 +62,7 @@ twitter follow @handle
 
 - Output: prefer `--yaml` for agents; `--json` when scripting; `-c/--compact`
   to save tokens. Never parse the rich table output.
-- Cap pulls: `--max 20`, not hundreds.
+- Cap pulls: `-n/--max 20`, not hundreds.
 - Structured auth errors: `not_authenticated`, `not_found`, `rate_limited`,
   `api_error`. On any failure run `scripts/social-doctor.sh` FIRST before
   assuming an outage.
