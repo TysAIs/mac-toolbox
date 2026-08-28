@@ -37,8 +37,8 @@ Mandates:
 2. Act on the printed `fix:` lines; they are exact commands.
 3. The doctor is read-only and never triggers logins. Login steps:
    `scripts/cdp-twitter-login.sh` / `cdp-reddit-login.sh` — everything is
-   automated EXCEPT Tyler typing his password + 2FA code in the visible
+   automated EXCEPT the user typing their password + 2FA code in the visible
    window (phone-only rule). No cookie pasting, no token copying, ever.
-4. Onboarding shortcut: if Tyler's daily browser already has valid sessions,
+4. Onboarding shortcut: if the user's daily browser already has valid sessions,
    `rdt login` and browser auto-extract need zero manual steps; record which
    browser profile was used in `~/.mac-toolbox/state/auth.json`.

@@ -6,7 +6,7 @@ mkdir -p "$SB/bin" "$SB/.hermes/profiles/alpha"
 printf '#!/bin/sh\nexit 0\n' > "$SB/bin/macos-harness" && chmod +x "$SB/bin/macos-harness"
 for p in . profiles/alpha; do printf 'You are TestBot %s.\n' "$p" > "$SB/.hermes/$p/SOUL.md"; done
 
-HERMES_HOME="$SB/.hermes" /tmp/mac-toolbox-clean/install.sh > "$SB/install.log" 2>&1
+HERMES_HOME="$SB/.hermes" /Users/itxji/TysAIs/mac-toolbox/install.sh > "$SB/install.log" 2>&1
 echo "install rc=$?"
 
 echo "--- scripts installed:"
@@ -21,7 +21,7 @@ soul_alpha=$(grep -c 'Resource hygiene (this machine)' "$SB/.hermes/profiles/alp
 echo "policy hygiene hits=$policy_hits  SOUL root=$soul_root  alpha=$soul_alpha"
 
 M1=$(md5 -q "$SB/.hermes/computer-control-policy.md")
-HERMES_HOME="$SB/.hermes" /tmp/mac-toolbox-clean/install.sh >/dev/null 2>&1
+HERMES_HOME="$SB/.hermes" /Users/itxji/TysAIs/mac-toolbox/install.sh >/dev/null 2>&1
 if [ "$(md5 -q "$SB/.hermes/computer-control-policy.md")" = "$M1" ]; then
   echo "idempotent OK"
 else

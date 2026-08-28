@@ -6,7 +6,7 @@
 #              pre-fill username if provided, harvest auth_token+ct0 cookies
 #              after sign-in, write ~/.mac-toolbox/cookies/twitter.env (0600),
 #              verify with social-doctor.
-#   HUMAN ONLY: Tyler types his password and 2FA code in the visible window.
+#   HUMAN ONLY: the user types their password and 2FA code in the visible window.
 #
 # Usage: cdp-twitter-login.sh [email-or-username]
 # Requires: Google Chrome (or set CHROME_BIN). Uses a DEDICATED profile at
@@ -77,15 +77,15 @@ if page:
                 "const b=[...document.querySelectorAll('div[role=button]')]"
                 ".find(x=>/next|continue/i.test(x.textContent));b&&b.click()", "returnByValue": True}),
         ])
-        print("username pre-filled; Tyler types password + 2FA now")
+        print("username pre-filled; the user types password + 2FA now")
     except Exception as e:
-        print(f"pre-fill skipped ({e}); Tyler types username+password+2FA")
+        print(f"pre-fill skipped ({e}); the user types username+password+2FA")
 PYEOF
 fi
 
 echo ""
 echo "============================================================"
-echo " TYLER (phone-only step): in the opened Chrome window,"
+echo " USER (phone-only step): in the opened Chrome window,"
 echo " type your X password, then your 2FA code if prompted."
 echo " Press ENTER HERE once you are signed in."
 echo "============================================================"

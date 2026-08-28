@@ -6,7 +6,7 @@
 #              cookies post-sign-in, stage ~/.mac-toolbox/cookies/reddit.env,
 #              run `rdt login` against the CDP profile (auto-extract), verify
 #              with social-doctor.
-#   HUMAN ONLY: Tyler types his Reddit password + 2FA code in the window.
+#   HUMAN ONLY: the user types their Reddit password + 2FA code in the window.
 #
 # Usage: cdp-reddit-login.sh
 # Timebox note (R2 §8): rdt-cli's headless cookie env-var name is
@@ -31,7 +31,7 @@ for i in $(seq 1 20); do curl -s "http://127.0.0.1:$DEBUG_PORT/json/version" >/d
 
 echo ""
 echo "============================================================"
-echo " TYLER (phone-only step): in the opened Chrome window,"
+echo " USER (phone-only step): in the opened Chrome window,"
 echo " type your Reddit username, password, and 2FA code if asked."
 echo " Press ENTER HERE once you are signed in."
 echo "============================================================"

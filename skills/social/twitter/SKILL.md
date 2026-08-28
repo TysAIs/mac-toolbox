@@ -23,7 +23,7 @@ source ~/.hermes/scripts/twitter-env.sh   # loads TWITTER_AUTH_TOKEN + TWITTER_C
 
 (wrapped automatically by `scripts/social-doctor.sh` preflight). Cookie jar:
 `~/.mac-toolbox/cookies/twitter.env` (0600), populated by
-`scripts/cdp-twitter-login.sh` — Tyler types ONLY password + 2FA; everything
+`scripts/cdp-twitter-login.sh` — the user types ONLY password + 2FA; everything
 else is automated.
 
 xurl is a separate official-API lane (DMs, media upload, raw v2) — do not use
@@ -75,3 +75,10 @@ Upstream: https://github.com/public-clis/twitter-cli (its SKILL.md/SCHEMA.md
 are linked, not vendored).
 
 > **Hermes-native overlap:** public X *discovery* (searching posts, reading discussion) is covered by Hermes' `x_search` tool (Grok-synthesized, citations). Use twitter-cli only for authenticated actions (posting, DMs, timelines-as-you) or when `x_search` is unavailable.
+
+
+## Known pitfall: ClientTransaction init failure (0.8.5)
+`WARNING ... Failed to init ClientTransaction: 'NoneType' object has no attribute 'group'`
+= X changed their ondemand.s JS structure again. Same breakage class as twikit issue #408.
+Options: `uv tool upgrade twitter-cli` for a fixed release, or use Hermes' x_search for
+reads and xPST's patched twikit path for authenticated writes.
