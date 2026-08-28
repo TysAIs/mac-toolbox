@@ -1,6 +1,6 @@
 # Computer Control Policy — Single Source of Truth
 
-Version: 2026-08-27.1
+Version: 2026-08-28.1
 Owner: you. Edit ONLY this file, then run `scripts/stamp-computer-control.sh` to propagate the compact ladder into every agent's SOUL.md. Never hand-edit the stamped blocks inside SOUL.md files.
 
 ---
@@ -18,12 +18,15 @@ Owner: you. Edit ONLY this file, then run `scripts/stamp-computer-control.sh` to
 2. **Known exact AppleScript/JXA** → `osascript`, or `mac.script()` inside the harness.
 3. **Native-app GUI work** → **macos-harness** (skill `apple/macos-harness`): background-window screenshots, PID-targeted clicks/keys, Accessibility tree. No focus-stealing, no cursor movement.
    - System Settings / consent-sheet quirks: keep a recipes skill for the gnarly panes.
-4. **Web tasks** → your configured browser-automation workflow, in this order:
-   - **browser-use** (`browser_exec` tool / `browser-use` CLI): headless or CDP-attached automation of real browser sessions, ideal for page automation, extraction, form-filling.
-   - **cua-driver** (`computer_use` tool / `cua-driver` CLI): full desktop + browser control for GUI-level tasks that need pixel/coordinate input (consent dialogs, canvas apps, native UI).
-   - Prefer **Brave CDP** (`~/bin/brave-cdp.sh`, port 9222) when the task needs the user's live logged-in Brave session.
-   - Do NOT install or use third-party closed-source browsers (ego-lite / citrolabs) — the stack above is native to Hermes and open source.
+4. **Web tasks** → Hermes-native browser stack (`browser_exec`, `/browser connect`, `browser_cdp`). For the user's live logged-in session: Brave CDP port 9222 (`~/bin/brave-cdp.sh`). Never install third-party closed-source browsers; never act state-changing without explicit confirmation.
 5. **Fallback only**: full-screen computer-use / vision drivers.
+
+6. **Before cloning/installing unknown repos or packages** → run the repo
+   security gate (`scripts/repo-intake/gate-clone.sh`, skill
+   `security/repo-security`). Missing scanner = FAIL; never skip the gate.
+   X reads → Hermes `x_search` (public discovery). Authenticated X/Reddit actions →
+   cookie CLIs (`skills/social/twitter`, `social/reddit`); health-check with
+   `scripts/social-doctor.sh` before assuming outages.
 
 ## Resource hygiene — browser tabs & processes (mandatory)
 

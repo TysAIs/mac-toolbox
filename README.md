@@ -62,10 +62,18 @@ costing under 100 words of persistent context per agent.
 
 ## Quick start
 
+One line (clones + runs the installer):
+
+```bash
+git clone https://github.com/TysAIs/mac-toolbox.git && cd mac-toolbox && ./install.sh
+```
+
+Or step by step:
+
 ```bash
 git clone https://github.com/TysAIs/mac-toolbox.git
 cd mac-toolbox
-./install.sh
+SKIP_V2=0 ./install.sh        # SKIP_V2=1 to skip the optional v2 tooling (repo gate, social CLIs)
 ```
 
 The installer will:
@@ -230,6 +238,43 @@ and [docs/INTEGRATION.md](docs/INTEGRATION.md) for wiring this into **any**
 agent harness (Claude Code, OpenAI Assistants, LangChain, custom loops) —
 including the three enforcement strategies for resource hygiene and why a
 cron is optional, not required.
+
+## v2: repo-security gate + social reach (2026-08-27)
+
+Two new capability lanes, both L0-native CLIs (no GUI/browser layers needed):
+
+### Repo security gate — never run unknown code unvetted
+
+Before any agent clones or installs an unknown repo:
+
+```bash
+scripts/repo-intake/gate-clone.sh <repo-url-or-dir>   # pre-clone gate
+scripts/repo-intake/gate-run.sh <dir>                  # pre-run gate
+```
+
+Combines **gitleaks** (secrets), **osv-scanner** (dependency CVEs),
+**NVIDIA SkillSpector** (agent-skill/MCP threats — runs automatically when the
+repo contains `SKILL.md`/`mcp.json`), and optional **trivy**. A missing scanner
+is a FAIL, never a silent pass. Tools: `npm i -g opensrc`,
+`brew install gitleaks osv-scanner`, `uv tool install git+https://github.com/NVIDIA/skillspector.git`.
+Full policy + allowlist workflow: [docs/tooling-policy.md](docs/tooling-policy.md).
+Skill: `skills/security/repo-security`.
+
+### Social reach — X + Reddit from free cookie-based CLIs
+
+- **twitter-cli** (`skills/social/twitter`) — X read/search/write, no API key.
+  Preflight: `source scripts/twitter-env.sh` (loads cookies from
+  `~/.mac-toolbox/cookies/twitter.env`, 0600).
+- **rdt-cli** (`skills/social/reddit`) — first Reddit capability here; login-cookie,
+  7-day TTL.
+- **social-doctor** (`scripts/social-doctor.sh`) — one command checks auth health
+  for every platform with exact fix commands (`--json` for agents). Never fails on
+  optional xurl being absent.
+- Onboarding (`scripts/cdp-{twitter,reddit}-login.sh`) automates everything except
+  typing your password + 2FA in a visible window — cookies are harvested over CDP
+  into 0600 files; values never print, paste, or commit.
+- English-platform only by design: no Chinese-platform CLIs (bili-cli, xhs-cli et al.)
+  and no agent-reach umbrella dependency.
 
 ## Credits
 
