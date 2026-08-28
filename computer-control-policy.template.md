@@ -1,6 +1,6 @@
 # Computer Control Policy — Single Source of Truth
 
-Version: 2026-08-27.3
+Version: 2026-08-28.1
 Owner: you. Edit ONLY this file, then run `scripts/stamp-computer-control.sh` to propagate the compact ladder into every agent's SOUL.md. Never hand-edit the stamped blocks inside SOUL.md files.
 
 ---

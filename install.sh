@@ -6,13 +6,9 @@ SRC="$(cd "$(dirname "$0")" && pwd)"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "==> 1/4 Installing macos-harness CLI (uv)"
-command -v macos-harness >/dev/null || {
-  command -v uv >/dev/null || brew install uv
-  uv tool install --python 3.12 macos-harness
-}
+echo "==> 1/5 Skipping GUI-harness CLI install (Hermes ships cua-driver natively — pid-scoped, no-focus input)"
 
-echo "==> 2/4 Copying skills into $DEST/skills/"
+echo "==> 2/5 Copying skills into $DEST/skills/"
 for skill_src in "$SRC"/skills/*/*; do
   [ -d "$skill_src" ] || continue
   category=$(basename "$(dirname "$skill_src")")
@@ -78,8 +74,7 @@ cat <<'EOF'
 Done. Remaining manual steps:
   1. System Settings -> Privacy & Security -> grant Accessibility and
      Screen & System Audio Recording to your terminal / agent host app.
-  2. Verify:        macos-harness doctor          (expect all true)
-  3. Live test:     echo 'print(mac.see("Finder"))' | macos-harness
+  2. Verify:        cua-driver doctor             (Hermes-native computer use)
   4. Optional: schedule resource hygiene checks (no LLM needed):
      */30 * * * * $DEST/scripts/resource-watchdog.sh
   5. Restart your Hermes gateway so agents reload souls + skills.
