@@ -82,3 +82,9 @@ are linked, not vendored).
 = X changed their ondemand.s JS structure again. Same breakage class as twikit issue #408.
 Options: `uv tool upgrade twitter-cli` for a fixed release, or use Hermes' x_search for
 reads and xPST's patched twikit path for authenticated writes.
+## Audit verdict (2026-08-28)
+twitter-cli is NOT recommended as a read path: search is broken (ClientTransaction,
+issues #69-#86 unmerged fixes, PyPI frozen at 0.8.5). Use Hermes x_search for reads.
+Authenticated writes via this CLI are also currently broken upstream (#80). This skill
+is retained only as a documented best-effort fallback — expect breakage on every X
+frontend change.
