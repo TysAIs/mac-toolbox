@@ -73,3 +73,5 @@ twitter follow @handle
 
 Upstream: https://github.com/public-clis/twitter-cli (its SKILL.md/SCHEMA.md
 are linked, not vendored).
+
+> **Hermes-native overlap:** public X *discovery* (searching posts, reading discussion) is covered by Hermes' `x_search` tool (Grok-synthesized, citations). Use twitter-cli only for authenticated actions (posting, DMs, timelines-as-you) or when `x_search` is unavailable.
