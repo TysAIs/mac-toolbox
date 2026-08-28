@@ -62,10 +62,18 @@ costing under 100 words of persistent context per agent.
 
 ## Quick start
 
+One line (clones + runs the installer):
+
+```bash
+git clone https://github.com/TysAIs/mac-toolbox.git && cd mac-toolbox && ./install.sh
+```
+
+Or step by step:
+
 ```bash
 git clone https://github.com/TysAIs/mac-toolbox.git
 cd mac-toolbox
-./install.sh
+SKIP_V2=0 ./install.sh        # SKIP_V2=1 to skip the optional v2 tooling (repo gate, social CLIs)
 ```
 
 The installer will:
