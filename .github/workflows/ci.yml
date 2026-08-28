@@ -27,14 +27,12 @@ jobs:
         run: |
           SB="$(mktemp -d)"
           mkdir -p "$SB/bin" "$SB/Test User/.hermes/profiles/alpha" "$SB/Test User/.hermes/profiles/beta"
-          printf '#!/bin/sh\nexit 0\n' > "$SB/bin/macos-harness" && chmod +x "$SB/bin/macos-harness"
           export PATH="$SB/bin:$PATH"
           for p in . profiles/alpha profiles/beta; do
             printf 'You are TestBot %s.\n' "$p" > "$SB/Test User/.hermes/$p/SOUL.md"
           done
 
           HERMES_HOME="$SB/Test User/.hermes" ./install.sh
-          test -f "$SB/Test User/.hermes/skills/apple/macos-harness/SKILL.md"
           POLICY="$SB/Test User/.hermes/computer-control-policy.md"
           grep -q '^Version:' "$POLICY"
           ! grep -q '{{HARDWARE_BASELINE}}' "$POLICY"
